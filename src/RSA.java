@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class RSA {
 	final static int L = 3;					//size of block - the encryption deals with L characters at a time
-	final static int PQ_BITLENGTH = 32;		//size of p,q
+	final static int PQ_BITLENGTH = 32;		//size of p,q , the maximum allowed number is 256 for this lab
 	final static int KEY_BITLENGTH = 32;	//size of e
 	
 	static Random rnd = new Random();
@@ -16,6 +16,7 @@ public class RSA {
 		
 		//System.out.println("test sqm: "+sqm(new BigInteger("3"),new BigInteger("5"),new BigInteger("7")).toString());
 		//System.out.println("test generatePrime: "+generatePrime(PRIME_BITLENGTH));
+		
 		
 		long startTime = System.nanoTime();
 		
@@ -32,6 +33,7 @@ public class RSA {
 		
 		writeFile(cipher,keyPair);
 	}
+	
 	/*
 	 * Write cipher into file "rsa_group9_L.crypto"
 	 * Write private key into file "rsa_group9_L.key"
@@ -68,15 +70,18 @@ public class RSA {
 			e.printStackTrace();
 		}
 	}
+	
 	//e(k) = x^e mod n where x represent L characters
 	static BigInteger[] encrypt(int[] plain, int L, BigInteger key_e, BigInteger key_n)
 	{
 		BigInteger[] cipher= new BigInteger[100/L+1];
 		int temp = 0;
 		int index = 0;
-		for(int i=0,l=L;plain[i]!=-1;i++)
+		//end of plaintext is -1
+		for(int i=0 ,l=L ;plain[i]!=-1 ;i++)
 		{
-			temp = (temp<<8) + plain[i];
+			//encode L characters at a time
+			temp = (temp << 8) + plain[i];
 			if(l==1)
 			{
 				cipher[index] = sqm(new BigInteger(""+temp),key_e,key_n);//encrypt
@@ -89,6 +94,7 @@ public class RSA {
 		}
 		return cipher;
 	}
+	
 	/*
 	 *  Read plain text into an integer array,
 	 *  characters are encoded on 8 bits (typically Latin1 encoding)
@@ -136,6 +142,9 @@ public class RSA {
 			q = generatePrime(PQ_BITLENGTH);
 		}while (q.equals(p));
 		n = p.multiply(q);//n = p*q
+		//----N should be bigger then 2^32 but smaller then 2^512
+		
+		
 		phi = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));//phi = (p-1)*(q-1)
 		do{
 			e = generatePrime(KEY_BITLENGTH);
@@ -188,17 +197,19 @@ public class RSA {
 		}
 		return a;
 	}
+	
 	//generate a strong probable prime with the specified bitLength
 	static BigInteger generatePrime(int bitLength){
 		BigInteger x = new BigInteger(bitLength,rnd);//[0,2^bitLength-1]
 		//change the most significant bit to 1 to make sure it meets the bitLength requirement
-		x = x.or(BigInteger.ONE.shiftLeft(bitLength-1));//[2^(bitLength-1),2^bitLength-1]
+		x = x.setBit(bitLength-1);
 		if(x.mod(big_two).equals(BigInteger.ZERO))//if n is even
 			x = x.add(BigInteger.ONE);
 		while(!miller_rabin(x,5))
 			x = x.add(big_two);
 		return x;
 	}
+	
 	/**
 	 * Use Miller-Rabin to test if n is a strong probable prime
 	 * @param n - number to be tested from primality
