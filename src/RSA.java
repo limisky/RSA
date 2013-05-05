@@ -17,19 +17,28 @@ public class RSA {
 		//System.out.println("test sqm: "+sqm(new BigInteger("3"),new BigInteger("5"),new BigInteger("7")).toString());
 		//System.out.println("test generatePrime: "+generatePrime(PRIME_BITLENGTH));
 		
-		
+		//start time capture
 		long startTime = System.nanoTime();
 		
+		//Generates the 3 keys that RSA need.
+		//KeyPair[0] = e
+		//KeyPair[1] = n
+		//KeyPair[2] = d
+		//KeyPair[3] = n
 		BigInteger[] keyPair = generateKey();
 		
 		//System.out.println("public key: (" + keyPair[0] + "," + keyPair[1] + ")");
 		//System.out.println("private key: (" + keyPair[2] + "," + keyPair[3] + ")");
-		//System.out.println("test keyPair: "+sqm(sqm(big_two,keyPair[0],keyPair[1]),keyPair[2],keyPair[3]));
+		//System.out.println("test keyPair: "+sqm(sqm(new BigInteger("3655611148945"),keyPair[0],keyPair[1]),keyPair[2],keyPair[3]));
 		
-		BigInteger[] cipher = encrypt(readFile("rsa_group9_"+L+".plain"),L,keyPair[0],keyPair[1]);
+		//Encrypts
+		int[] plainText = readFile("rsa_group9_"+L+".plain");
+		BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
 		
+		
+		//end of time capture
 		long endTime = System.nanoTime();
-		System.out.println("Run time： "+(endTime-startTime)+"ns"); 
+		System.out.println("Run time: "+(endTime-startTime)+" ns"); 
 		
 		writeFile(cipher,keyPair);
 	}
@@ -142,13 +151,11 @@ public class RSA {
 			q = generatePrime(PQ_BITLENGTH);
 		}while (q.equals(p));
 		n = p.multiply(q);//n = p*q
-		//----N should be bigger then 2^32 but smaller then 2^512
-		
 		
 		phi = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));//phi = (p-1)*(q-1)
 		do{
 			e = generatePrime(KEY_BITLENGTH);
-		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0);
+		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0||);
 		d = inv(e,phi);
 		
 		result[0]=e;
