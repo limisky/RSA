@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{algpseudocode}
 \usepackage{algorithm}
+\usepackage{multirow}
 
 
 \pagestyle{empty}
@@ -28,5 +29,55 @@
 \section{Reflection}
 
 \section{Statistics}
+
+
+\begin{table}[h]
+  \centering
+    \begin{tabular}{ |c|c|c|c|c|c|c| }
+      \hline
+      \multicolumn{7}{ |c| }{encrypt()} \\
+      \hline
+      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(s)} \\
+      \hline
+      1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+      \hline
+    \end{tabular}
+    \caption{\emph{Benchmark} for the encrypt function}
+    \label{tab:res:RSA}
+\end{table}
+
+
+
+\begin{table}[h]
+  \centering
+    \begin{tabular}{ |c|c|c|c|c|c|c| }
+      \hline
+      \multicolumn{7}{ |c| }{decrypt()} \\
+      \hline
+      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(s)} \\
+      \hline
+      1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+      \hline
+    \end{tabular}
+    \caption{\emph{Benchmark} for the decrypt function}
+    \label{tab:res:RSA}
+\end{table}
+
+
+
+\begin{table}
+  \centering
+    \begin{tabular}{ |c|c|c|c|c|c|c| }
+      \hline
+      \multicolumn{7}{ |c| }{generateKey()} \\
+      \hline
+      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(s)} \\
+      \hline
+      1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+      \hline
+    \end{tabular}
+    \caption{\emph{Benchmark} for the generateKey function}
+    \label{tab:res:RSA}
+\end{table}
 
 \end{document}

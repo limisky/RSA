@@ -47,6 +47,8 @@ INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/algorithms/algorithm.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/algorithms/algorithm.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/float/float.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/float/float.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/multirow/multirow.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT lab2_report.aux
 INPUT lab2_report.aux
 OUTPUT lab2_report.aux
@@ -87,6 +89,9 @@ INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 OUTPUT lab2_report.pdf
 INPUT /usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT lab2_report.aux
@@ -94,3 +99,4 @@ INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.p
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
