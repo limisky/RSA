@@ -202,6 +202,7 @@ public class RSA {
 		
 		phi = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));//phi = (p-1)*(q-1)
 		do{
+<<<<<<< HEAD
 			e = new BigInteger(KEY_BITLENGTH,rnd);
 			e = e.setBit(KEY_BITLENGTH-1);
 			count++;
@@ -210,6 +211,10 @@ public class RSA {
 		{
 			return generateKey();
 		}		
+=======
+			e = generatePrime(KEY_BITLENGTH);
+		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0);
+>>>>>>> Changed error in the while condtion
 		d = inv(e,phi);
 		
 		result[0]=e;
