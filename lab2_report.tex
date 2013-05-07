@@ -33,51 +33,132 @@
 
 \begin{table}[h]
   \centering
-    \begin{tabular}{ |c|c|c|c|c|c|c| }
+    \begin{tabular}{ |c|c|c|p{3cm}|c|c|c| }
       \hline
       \multicolumn{7}{ |c| }{encrypt()} \\
       \hline
-      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(s)} \\
+      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(ns)} \\
       \hline
-      1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+      16 & 8 & 175 & 4015087 & 1 & 23 & 70853000 \\
+      16 & 8 & 173 & 11645861 & 2 & 23 & 10009000 \\
+      16 & 8 & 229 & 5763117 & 3 & 23 & 24401000 \\
+      39 & 31 & 179 & \begin{math} 5.5298620 \ast 10^{20} \end{math} & 1 & 23 & 12858000 \\
+      62 & 54 & 251 & \begin{math} 2.6628073 \ast 10^{34} \end{math} & 2 & 23 & 19046000 \\
+      85 & 77 & 227 & \begin{math} 6.3118817 \ast 10^{48} \end{math} & 3 & 23 & 15151000 \\
+      131 & 123 & 227 & \begin{math} 1.0273761 \ast 10^{76} \end{math} & 1 & 23 & 23883000 \\
+      177 & 169 & 229 &  \begin{math}7.0571036 \ast 10^{104} \end{math} & 2 & 23 & 130990000 \\
+      223 & 215 & 139 & \begin{math} 7.5669375 \ast 10^{131} \end{math} & 3 & 23 & 202935000 \\
+      16 & 8 & 145 & 3832657 & 1 & 53 & 8761000 \\
+      16 & 8 & 253 & 8173417 & 2 & 53 & 17784000 \\
+      16 & 8 & 253 & 9651517 & 3 & 53 & 9131000 \\
+      39 & 31 & 191 & \begin{math} 8.6802261 \ast 10^{20} \end{math} & 1 & 53 & 9412000 \\
+      62 & 54 & 149 & \begin{math} 3.3223155 \ast 10^{34} \end{math} & 2 & 53 & 15075000 \\
+      85 & 77 & 131 & \begin{math} 3.5485491 \ast 10^{48} \end{math} & 3 & 53 & 7788000 \\
+      131 & 123 & 153 & \begin{math} 3.5322089 \ast 10^{76} \end{math} & 1 & 53 & 39715000 \\
+      177 & 169 & 215 & \begin{math} 5.6082680 \ast 10^{104} \end{math} & 2 & 53 & 40994000 \\
+      223 & 215 & 227 & \begin{math} 4.9663907 \ast 10^{131} \end{math} & 3 & 53 & 224722000 \\
+      16 & 8 & 211 & 17601391 & 1 & 86 & 17933000 \\
+      16 & 8 & 211 & 17101891 & 2 & 86 & 8636000 \\
+      16 & 8 & 241 & 11501401 & 3 & 86 & 27810000 \\
+      39 & 31 & 217 & \begin{math} 3.7576331 \ast 10^{20} \end{math} & 1 & 86 & 20844000 \\
+      62 & 54 & 251 & \begin{math} 4.1917540 \ast 10^{34} \end{math} & 2 & 86 & 29359000 \\
+      85 & 77 & 251 & \begin{math} 2.8594169 \ast 10^{48} \end{math} & 3 & 86 & 12591000 \\
+      131 & 123 & 251 & \begin{math} 9.8765183 \ast 10^{76} \end{math} & 1 & 86 & 29287000 \\
+      177 & 169 & 221 & \begin{math} 7.2295576 \ast 10^{104} \end{math} & 2 & 86 & 22908000 \\
+      223 & 215 & 215 & \begin{math} 5.1382213 \ast 10^{131} \end{math} & 3 & 86 & 95712000 \\
+
       \hline
     \end{tabular}
     \caption{\emph{Benchmark} for the encrypt function}
-    \label{tab:res:RSA}
+    \label{tab:res:Encrypt}
 \end{table}
 
 
 
 \begin{table}[h]
   \centering
-    \begin{tabular}{ |c|c|c|c|c|c|c| }
+    \begin{tabular}{ |c|c|c|p{3cm}|c|c|c| }
       \hline
       \multicolumn{7}{ |c| }{decrypt()} \\
       \hline
-      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(s)} \\
+      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(ns)} \\
       \hline
-      1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+      16 & 8 & 175 & 4015087 & 1 & 23 & 643000 \\
+      16 & 8 & 173 & 11645861 & 2 & 23 & 134000 \\
+      16 & 8 & 229 & 5763117 & 3 & 23 & 181000 \\
+      39 & 31 & 179 & \begin{math} 5.5298620 \ast 10^{20} \end{math} & 1 & 23 & 753000 \\
+      62 & 54 & 251 & \begin{math} 2.6628073 \ast 10^{31} \end{math} & 2 & 23 & 145000 \\
+      85 & 77 & 227 & \begin{math} 6.3118817 \ast 10^{48} \end{math} & 3 & 23 & 178000 \\
+      131 & 123 & 227 & \begin{math} 1.0273761 \ast 10^{76} \end{math} & 1 & 23 & 369000 \\
+      177 & 169 & 229 & \begin{math} 7.0571036 \ast 10^{104} \end{math} & 2 & 23 & 138000 \\
+      223 & 215 & 139 & \begin{math} 7.5669375 \ast 10^{131} \end{math} & 3 & 23 & 124000 \\
+      16 & 8 & 145 & 3832657 & 1 & 53 & 402000 \\
+      16 & 8 & 253 & 8173417 & 2 & 53 & 224000 \\
+      16 & 8 & 253 & 9651517 & 3 & 53 & 148000 \\
+      39 & 31 & 191 & \begin{math} 8.6802261 \ast 10^{20} \end{math} & 1 & 53 & 346000 \\
+      62 & 54 & 149 & \begin{math} 3.3223155 \ast 10^{31} \end{math} & 2 & 53 & 153000 \\
+      85 & 77 & 131 & \begin{math} 3.5485491 \ast 10^{48} \end{math} & 3 & 53 & 115000 \\
+      131 & 123 & 153  & \begin{math} 3.5322089 \ast 10^{76} \end{math} & 1 & 53 & 313000 \\
+      177 & 169 & 215  & \begin{math} 5.6082680 \ast 10^{104} \end{math} & 2 & 53 & 267000 \\
+      223 & 215 & 227  & \begin{math} 4.9663907 \ast 10^{131} \end{math} & 3 & 53 & 321000 \\
+      16 & 8 & 211 & 17601391 & 1 & 86 & 561000 \\
+      16 & 8 & 211 & 17101891 & 2 & 86 & 285000 \\
+      16 & 8 & 241 & 11501401 & 3 & 86 & 191000 \\
+      39 & 31 & 217 & \begin{math} 3.7576331 \ast 10^{20} \end{math} & 1 & 86 & 752000 \\
+      62 & 54 & 251 & \begin{math} 4.1917540 \ast 10^{31} \end{math} & 2 & 86 & 312000 \\
+      85 & 77 & 251 & \begin{math} 2.8594169 \ast 10^{48} \end{math} & 3 & 86 & 426000 \\
+      131 & 123 & 251  & \begin{math} 9.8765183 \ast 10^{76} \end{math} & 1 & 86 & 694000 \\
+      177 & 169 & 221  & \begin{math} 7.2295576 \ast 10^{104} \end{math} & 2 & 86 & 430000 \\
+      223 & 215 & 215  & \begin{math} 5.1382213 \ast 10^{131} \end{math} & 3 & 86 & 391000 \\
+
       \hline
     \end{tabular}
     \caption{\emph{Benchmark} for the decrypt function}
-    \label{tab:res:RSA}
+    \label{tab:res:Decrypt}
 \end{table}
 
 
 
 \begin{table}
   \centering
-    \begin{tabular}{ |c|c|c|c|c|c|c| }
+    \begin{tabular}{ |c|c|c|p{3cm}|c|c|c| }
       \hline
       \multicolumn{7}{ |c| }{generateKey()} \\
       \hline
-      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(s)} \\
+      \emph{p} & \emph{q} & \emph{e} & \emph{d} & \emph{L} & \emph{Text Length} & \emph{Time(ns)} \\
       \hline
-      1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+      16 & 8 & 175 & 4015087 & 1 & 23 & 1323000 \\
+      16 & 8 & 173 & 11645861 & 2 & 23 & 315000 \\
+      16 & 8 & 229 & 5763117 & 3 & 23 & 273000 \\
+      39 & 31 & 179 & \begin{math} 5.5298620 \ast 10^{20} \end{math} & 1 & 23 & 4624000 \\
+      62 & 54 & 251 & \begin{math} 2.6628073 \ast 10^{31} \end{math} & 2 & 23 & 1986000 \\
+      85 & 77 & 227 & \begin{math} 6.3118817 \ast 10^{48} \end{math} & 3 & 23 & 3570000 \\
+      131 & 123 & 227 & \begin{math} 1.0273761 \ast 10^{76} \end{math} & 1 & 23 & 19929000 \\
+      177 & 169 & 229 & \begin{math} 7.0571036 \ast 10^{104} \end{math} & 2 & 23 & 9599000 \\
+      223 & 215 & 139 & \begin{math} 7.5669375 \ast 10^{131} \end{math} & 3 & 23 & 12260000 \\
+      16 & 8 & 145 & 3832657 & 1 & 53 & 1087000 \\
+      16 & 8 & 253 & 8173417 & 2 & 53 & 682000 \\
+      16 & 8 & 253 & 9651517 & 3 & 53 & 366000 \\
+      39 & 31 & 191 & \begin{math} 8.6802261 \ast 10^{20} \end{math} & 1 & 53 & 2947000 \\
+      62 & 54 & 149 & \begin{math} 3.3223155 \ast 10^{31} \end{math} & 2 & 53 & 2643000 \\
+      85 & 77 & 131 & \begin{math} 3.5485491 \ast 10^{48} \end{math} & 3 & 53 & 3361000 \\
+      131 & 123 & 153 & \begin{math} 3.5322089 \ast 10^{76} \end{math} & 1 & 53 & 24107000 \\
+      177 & 169 & 215 & \begin{math} 5.6082680 \ast 10^{104} \end{math} & 2 & 53 & 20832000 \\
+      223 & 215 & 227 & \begin{math} 4.9663907 \ast 10^{131} \end{math} & 3 & 53 & 30100000 \\
+      16 & 8 & 211 & 17601391 & 1 & 86 & 1548000 \\
+      16 & 8 & 211 & 17101891 & 2 & 86 & 914000 \\
+      16 & 8 & 241 & 11501401 & 3 & 86 & 564000 \\
+      39 & 31 & 217 & \begin{math} 3.7576331 \ast 10^{20} \end{math} & 1 & 86 & 7150000 \\
+      62 & 54 & 251 & \begin{math} 4.1917540 \ast 10^{31} \end{math} & 2 & 86 & 4862000 \\
+      85 & 77 & 251 & \begin{math} 2.8594169 \ast 10^{48} \end{math} & 3 & 86 & 6422000 \\
+      131 & 123 & 251 & \begin{math} 9.8765183 \ast 10^{76} \end{math} & 1 & 86 & 38114000 \\
+      177 & 169 & 221 & \begin{math} 7.2295576 \ast 10^{104} \end{math} & 2 & 86 & 35639000 \\
+      223 & 215 & 215 & \begin{math} 5.1382213 \ast 10^{131} \end{math} & 3 & 86 & 39416000 \\
+
       \hline
     \end{tabular}
     \caption{\emph{Benchmark} for the generateKey function}
-    \label{tab:res:RSA}
+    \label{tab:res:generateKey}
 \end{table}
 
 \end{document}
