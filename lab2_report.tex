@@ -30,7 +30,7 @@
 \section{Reflection}
 
 \subsection{What happens if a non-prime number incorrectly passes this test during key generation?}
-If a non-prime number does not pass the primality test, it will be impossible to compute \emph{e}
+If a non-prime number does pass the primality test incorrectly, you will get a bad key. \emph{}
 
 \subsection{What would you do when the number of characters to encode is not a multiple of L?}
 What we do in our implementation is that we add zeroes (padding) to match L. 
@@ -43,6 +43,7 @@ What we do in our implementation is that we add zeroes (padding) to match L.
 \paragraph{Key Generation}
 We can observe from the table that it takes longer time to generate keys when the key length is 1. We do not know why this is the case.
 \emph{See the generateKey table below}
+
 \paragraph{Decryption}
 From the tables below we can see that for the decrypt function, the longer the key length is the faster it runs. It is easy to see that this is true since it will decrypt more characters at a time, resulting in lesser iterations. \emph{See the decrypt table below}
 
