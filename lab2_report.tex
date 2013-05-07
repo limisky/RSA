@@ -30,10 +30,25 @@
 \section{Reflection}
 
 \subsection{What happens if a non-prime number incorrectly passes this test during key generation?}
+If a non-prime number does not pass the primality test, it will be impossible to compute \emph{e}
 
 \subsection{What would you do when the number of characters to encode is not a multiple of L?}
+What we do in our implementation is that we add zeroes (padding) to match L. 
 
 \section{Statistics}
+
+\paragraph{Encryption} The time for encryption is clearly affected by how big p and q are. The bigger p and q are the longer the run-time. 
+\emph{See the encrypt table below}
+
+\paragraph{Key Generation}
+We can observe from the table that it takes longer time to generate keys when the key length is 1. We do not know why this is the case.
+\emph{See the generateKey table below}
+\paragraph{Decryption}
+From the tables below we can see that for the decrypt function, the longer the key length is the faster it runs. It is easy to see that this is true since it will decrypt more characters at a time, resulting in lesser iterations. \emph{See the decrypt table below}
+
+\paragraph{Comments on the Statistics} 
+These statistics are not optimal, they do not take into account every case. For example, \emph{e} follows \emph{p} and \emph{q} almost linearly, but it does not take into account when \emph{p} and \emph{q} are large and \emph{e} is small. For this reason our analysis may be lacking.
+
 
     \begin{longtable}{ |c|c|c|c|c|c|c| }
       \hline
