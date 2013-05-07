@@ -6,12 +6,12 @@ import java.util.Random;
 
 public class RSA {
 	final static int L = 2;					//size of block - the encryption deals with L characters at a time
-	final static int PQ_BITLENGTH = 32;		//size of p,q , the maximum allowed number is 256 for this lab
-	final static int KEY_BITLENGTH = 32;	//size of e
+	final static int PQ_BITLENGTH = 32;		//size of p,q , the maximum allowed number is 256 for this lab, minimum is 16
+	final static int KEY_BITLENGTH = 32;	//size of e, can not be greater then 2*PQ_BITLENGTH
 	
 	
 	static Random rnd = new Random();
-	static BigInteger big_two = new BigInteger("2");
+	static BigInteger big_two = new BigInteger("2"); //BigInteger is Java's way of using big integer. This declares two.
 	
 	public static void main(String[] args) {
 		
@@ -37,25 +37,37 @@ public class RSA {
 		System.out.println("Run time: "+(endTime-startTime)+" ns"); 
 		
 		
-		//Encrypts
+		//reads our file
 		int[] plainText = readFile("rsa_group9_"+L+".plain");
 		
+		//Encrypt plaintext
 		BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
 
+		//Decrypt plaintext
 		plainText = decrypt(cipher,L,keyPair[2],keyPair[3]);
+		
 		
 		for(int i=0;i<plainText.length;i++)
 		{
 			System.out.print((char)plainText[i]);
 		}
 		
+		//Writes files :
+		// "rsa_group9_"+L+".crypto"
+		// "rsa_group9_"+L+".key"
+		// "rsa_group9_"+L+".pub"
 		writeFile(cipher,keyPair);
 	}
 	
-	/*
+	/**
+	 * Writes cipher, private and public key to files.
+	 * 
 	 * Write cipher into file "rsa_group9_L.crypto"
 	 * Write private key into file "rsa_group9_L.key"
 	 * Write public key into file "rsa_group9_L.pub"
+	 * 
+	 * @param cipher  - The cipher
+	 * @param keyPair - Public and private keys
 	 */
 	static void writeFile(BigInteger[] cipher, BigInteger[] keyPair)
 	{
@@ -88,13 +100,22 @@ public class RSA {
 			e.printStackTrace();
 		}
 	}
-	//d(k) = x^d mod n where x represent L characters
+	
+	/**
+	 * d(k) = x^d mod n where x represent L characters
+	 * 
+	 * @param cipher - cipher
+	 * @param L 	 - Chars to be decrypted at the same time.
+	 * @param key_d  - d of public key pair in RSA
+	 * @param key_n  - n of public key pair in RSA
+	 * @return plaintext, each char on a own space
+	 */
 	static int[] decrypt(BigInteger[] cipher, int L, BigInteger key_d, BigInteger key_n)
 	{
 		int[] plain = new int[102];
 		BigInteger tempCipher;
 		BigInteger tempPlain;
-		BigInteger mask= new BigInteger("255");
+		BigInteger mask= new BigInteger("255"); //used for masking out bits
 		for(int i=0;cipher[i]!=null;i++)
 		{
 			tempCipher = cipher[i];
@@ -103,31 +124,58 @@ public class RSA {
 			
 			for (int j = L-1;j>=0;j--)
 			{
-				if (j==0 && L==3)			
-					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();	
-				else if (j==0 && L==2)
-					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();
-				else if(j==0 && L==1)
+				if (L==3){
+					if (j==0)			
+						plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();
+					else if(j==1)
+						plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).and(mask).intValue();
+					else //(j==2)
+						plain[L*i+(L-j-1)] = tempPlain.shiftRight(16).intValue();
+				}
+				else if (L==2){
+					if (j==0)
+						plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();
+					else //(j==1)
+						plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).intValue();
+				}
+				else // L==1
 					plain[L*i+(L-j-1)] = tempPlain.intValue();
+					
 				
-				else if(j==1 && L==3)
-					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).and(mask).intValue();
-				else if(j==1 && L==2)
-					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).intValue();
-				else if(j==1 && L==1)
-					plain[L*i+(L-j-1)] = tempPlain.intValue();
-				
-				else if(j==2 && L==3)
-					plain[L*i+(L-j-1)] = tempPlain.shiftRight(16).intValue();
-				else
-					plain[L*i+(L-j-1)] = -1;
+//				
+//				if (j==0 && L==3)			
+//					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();	
+//				else if (j==0 && L==2)
+//					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();
+//				else if(j==0 && L==1)
+//					plain[L*i+(L-j-1)] = tempPlain.intValue();
+//				
+//				else if(j==1 && L==3)
+//					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).and(mask).intValue();
+//				else if(j==1 && L==2)
+//					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).intValue();
+//				else if(j==1 && L==1)
+//					plain[L*i+(L-j-1)] = tempPlain.intValue();
+//				
+//				else if(j==2 && L==3)
+//					plain[L*i+(L-j-1)] = tempPlain.shiftRight(16).intValue();
+//				else
+//					plain[L*i+(L-j-1)] = -1;
 				
 			}
 		}
 		return plain;
 	}
 	
-	//e(k) = x^e mod n where x represent L characters
+	/**
+	 * e(k) = x^e mod n where x represent L characters
+	 * 
+	 * @param plain - plaintext
+	 * @param L 	 - Chars to be encrypted at the same time.
+	 * @param key_e  - e of public key pair in RSA
+	 * @param key_n  - n of public key pair in RSA
+	 * @return encrypted plaintext with RSA
+	 */
 	static BigInteger[] encrypt(int[] plain, int L, BigInteger key_e, BigInteger key_n)
 	{
 		BigInteger[] cipher= new BigInteger[100/L+1];
@@ -136,7 +184,7 @@ public class RSA {
 		//end of plaintext is -1
 		for(int i=0 ,l=L ;plain[i]!=-1 ;i++)
 		{
-			//encode L characters at a time
+			//encode L characters at a time in 8 bits
 			temp = (temp << 8) + plain[i];
 			if(l==1)
 			{
@@ -151,9 +199,12 @@ public class RSA {
 		return cipher;
 	}
 	
-	/*
-	 *  Read plain text into an integer array,
-	 *  characters are encoded on 8 bits (typically Latin1 encoding)
+	/**
+	 * Read plain text into an integer array,
+	 * characters are encoded on 8 bits (typically Latin1 encoding)
+	 * 
+	 * @param fileName - file to read from
+	 * @return the first 102 chars, one char in one space
 	 */
 	static int[] readFile(String fileName)
 	{
@@ -174,7 +225,7 @@ public class RSA {
 		}
 		//when the number of characters to encode is not a multiple of L
 		//------------------------------------------------------------
-		//----------------???WHAT TO DO HERE???-----------------------
+		//----------------We pad the message with zeroes-------------
 		//------------------------------------------------------------
 		while(i%L!=0)
 		{
@@ -183,11 +234,11 @@ public class RSA {
 		}
         return plain;
 	}
-	/*
+	/**
 	 * Generate key pair for RSA
 	 * @return 
-	 * 		result[0]&result[1] - public key
-	 * 		result[2]&result[3] - private key
+	 * 		result[0]&result[1] - public key (e,n)
+	 * 		result[2]&result[3] - private key (d,n)
 	 */
 	static BigInteger[] generateKey()
 	{
@@ -203,9 +254,10 @@ public class RSA {
 		phi = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));//phi = (p-1)*(q-1)
 		do{
 			e = new BigInteger(KEY_BITLENGTH,rnd);
-			e = e.setBit(KEY_BITLENGTH-1);
+			e = e.setBit(KEY_BITLENGTH-1); //make sure e uses KEY_BITLENGTH bits
 			count++;
 		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0||count<10000);
+		//Try a maximumof 10 000 times before using new probable prime numbers
 		if(count == 10000)
 		{
 			return generateKey();
@@ -220,9 +272,15 @@ public class RSA {
 		
 		return result;
 	}
-	/*
+
+	/**
 	 * Use Extended Euclidean Algorithm to find y = inv(x,n) is such that (x*y=1) mod n
 	 * ax+by=1 return x+b
+	 * 
+	 * @param x - 
+	 * @param n - 
+	 * 
+	 * @return x+b
 	 */
 	static BigInteger inv(BigInteger x, BigInteger n)
 	{
@@ -247,7 +305,15 @@ public class RSA {
 		return tempxy;		
 	}
 	
-	//calculate the greatest common divisor of a and b
+	
+	/**
+	 * calculate the greatest common divisor of a and b
+	 * 
+	 * @param a - 
+	 * @param b - 
+	 * 
+	 * @return gcd(a,b)
+	 */
 	static BigInteger gcd(BigInteger a, BigInteger b)
 	{
 		BigInteger temp;
@@ -260,7 +326,12 @@ public class RSA {
 		return a;
 	}
 	
-	//generate a strong probable prime with the specified bitLength
+	/**
+	 * generate a strong probable prime with the specified bitLength
+	 * 
+	 * @param bitLength - number of bits the prime should be
+	 * @return a probable prime
+	 */
 	static BigInteger generatePrime(int bitLength){
 		BigInteger x = new BigInteger(bitLength,rnd);//[0,2^bitLength-1]
 		//change the most significant bit to 1 to make sure it meets the bitLength requirement
@@ -312,7 +383,15 @@ public class RSA {
 		}
 		return false;
     }
-	//Square-and-Multiply algorithm to calculate (x^e) mod m
+    
+    /**
+	 * //Square-and-Multiply algorithm to calculate (x^e) mod m
+	 * 
+	 * @param x - 
+	 * @param e - 
+	 * @param m - 
+	 * @return (x^e) mod m
+	 */
 	static BigInteger sqm(BigInteger x, BigInteger e, BigInteger m){
 		BigInteger r = new BigInteger("1");
 		while(e.compareTo(BigInteger.ZERO)>0)
