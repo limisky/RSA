@@ -155,7 +155,8 @@ public class RSA {
 		phi = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));//phi = (p-1)*(q-1)
 		do{
 			e = generatePrime(KEY_BITLENGTH);
-		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0||);
+		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0);
+		//should not do gcd twice
 		d = inv(e,phi);
 		
 		result[0]=e;
