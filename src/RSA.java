@@ -5,9 +5,10 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class RSA {
-	final static int L = 3;					//size of block - the encryption deals with L characters at a time
+	final static int L = 2;					//size of block - the encryption deals with L characters at a time
 	final static int PQ_BITLENGTH = 32;		//size of p,q , the maximum allowed number is 256 for this lab
 	final static int KEY_BITLENGTH = 32;	//size of e
+	
 	
 	static Random rnd = new Random();
 	static BigInteger big_two = new BigInteger("2");
@@ -29,16 +30,24 @@ public class RSA {
 		
 		//System.out.println("public key: (" + keyPair[0] + "," + keyPair[1] + ")");
 		//System.out.println("private key: (" + keyPair[2] + "," + keyPair[3] + ")");
-		//System.out.println("test keyPair: "+sqm(sqm(new BigInteger("3655611148945"),keyPair[0],keyPair[1]),keyPair[2],keyPair[3]));
-		
-		//Encrypts
-		int[] plainText = readFile("rsa_group9_"+L+".plain");
-		BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
-		
-		
+		//System.out.println("test keyPair: "+sqm(sqm(new BigInteger("100"),keyPair[0],keyPair[1]),keyPair[2],keyPair[3]));
+
 		//end of time capture
 		long endTime = System.nanoTime();
 		System.out.println("Run time: "+(endTime-startTime)+" ns"); 
+		
+		
+		//Encrypts
+		int[] plainText = readFile("rsa_group9_"+L+".plain");
+		
+		BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
+
+		plainText = decrypt(cipher,L,keyPair[2],keyPair[3]);
+		
+		for(int i=0;i<plainText.length;i++)
+		{
+			System.out.print((char)plainText[i]);
+		}
 		
 		writeFile(cipher,keyPair);
 	}
@@ -79,6 +88,44 @@ public class RSA {
 			e.printStackTrace();
 		}
 	}
+	//d(k) = x^d mod n where x represent L characters
+	static int[] decrypt(BigInteger[] cipher, int L, BigInteger key_d, BigInteger key_n)
+	{
+		int[] plain = new int[102];
+		BigInteger tempCipher;
+		BigInteger tempPlain;
+		BigInteger mask= new BigInteger("255");
+		for(int i=0;cipher[i]!=null;i++)
+		{
+			tempCipher = cipher[i];
+			
+			tempPlain = sqm(new BigInteger(""+ tempCipher),key_d,key_n);//decrypt		
+			
+			for (int j = L-1;j>=0;j--)
+			{
+				if (j==0 && L==3)			
+					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();	
+				else if (j==0 && L==2)
+					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();
+				else if(j==0 && L==1)
+					plain[L*i+(L-j-1)] = tempPlain.intValue();
+				
+				else if(j==1 && L==3)
+					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).and(mask).intValue();
+				else if(j==1 && L==2)
+					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).intValue();
+				else if(j==1 && L==1)
+					plain[L*i+(L-j-1)] = tempPlain.intValue();
+				
+				else if(j==2 && L==3)
+					plain[L*i+(L-j-1)] = tempPlain.shiftRight(16).intValue();
+				else
+					plain[L*i+(L-j-1)] = -1;
+				
+			}
+		}
+		return plain;
+	}
 	
 	//e(k) = x^e mod n where x represent L characters
 	static BigInteger[] encrypt(int[] plain, int L, BigInteger key_e, BigInteger key_n)
@@ -93,7 +140,7 @@ public class RSA {
 			temp = (temp << 8) + plain[i];
 			if(l==1)
 			{
-				cipher[index] = sqm(new BigInteger(""+temp),key_e,key_n);//encrypt
+				cipher[index] = sqm(new BigInteger(temp+""),key_e,key_n);//encrypt
 				l=L;
 				index++;
 				temp = 0;
@@ -147,6 +194,7 @@ public class RSA {
 		BigInteger result[] = new BigInteger[4];
 		BigInteger p = generatePrime(PQ_BITLENGTH);
 		BigInteger q,phi,n,e,d;
+		int count = 0;
 		do{
 			q = generatePrime(PQ_BITLENGTH);
 		}while (q.equals(p));
@@ -154,9 +202,15 @@ public class RSA {
 		
 		phi = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));//phi = (p-1)*(q-1)
 		do{
-			e = generatePrime(KEY_BITLENGTH);
-		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0);
-		//should not do gcd twice
+			e = new BigInteger(KEY_BITLENGTH,rnd);
+			e = e.setBit(KEY_BITLENGTH-1);
+			count++;
+		}while(!gcd(e,phi).equals(BigInteger.ONE)||e.compareTo(phi)>=0||count<10000);
+		if(count == 10000)
+		{
+			return generateKey();
+		}		
+
 		d = inv(e,phi);
 		
 		result[0]=e;
