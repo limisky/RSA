@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import java.util.Random;
 
 public class RSA {
-	final static int L = 2;					//size of block - the encryption deals with L characters at a time
+	static int L = 2;					//size of block - the encryption deals with L characters at a time
 	final static int PQ_BITLENGTH = 32;		//size of p,q , the maximum allowed number is 256 for this lab, minimum is 16
 	final static int KEY_BITLENGTH = 32;	//size of e, can not be greater then 2*PQ_BITLENGTH
 	
@@ -16,58 +16,65 @@ public class RSA {
 	
 	public static void main(String[] args) {
 		
-		//System.out.println("test sqm: "+sqm(new BigInteger("3"),new BigInteger("5"),new BigInteger("7")).toString());
-		//System.out.println("test generatePrime: "+generatePrime(PRIME_BITLENGTH));
-		
-		//start time capture
-		long startTime = System.nanoTime();
-		
-		//Generates the 3 keys that RSA need.
-		//KeyPair[0] = e
-		//KeyPair[1] = n
-		//KeyPair[2] = d
-		//KeyPair[3] = n
-		BigInteger[] keyPair = generateKey();
-		
-		//System.out.println("public key: (" + keyPair[0] + "," + keyPair[1] + ")");
-		//System.out.println("private key: (" + keyPair[2] + "," + keyPair[3] + ")");
-		//System.out.println("test keyPair: "+sqm(sqm(new BigInteger("100"),keyPair[0],keyPair[1]),keyPair[2],keyPair[3]));
-
-		//end of time capture
-		long endTime = System.nanoTime();
-		System.out.println("Run time: "+(endTime-startTime)+" ns"); 
-		
-		
-		//reads our file
-		int[] plainText = readFile("rsa_group9_"+L+".plain");
-		
-		//Encrypt plaintext
-		BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
-
-		//Decrypt plaintext
-		plainText = decrypt(cipher,L,keyPair[2],keyPair[3]);
-		
-		
-		for(int i=0;i<plainText.length;i++)
-		{
-			System.out.print((char)plainText[i]);
+		//Uncomment this section for creating group 9s cryptos, plaintext on file is needed
+/*		for (int i=1; i<=4; i++){
+			createRSACipher();
+			L+=1;
 		}
+ */
 		
-		//Writes files :
-		// "rsa_group9_"+L+".crypto"
-		// "rsa_group9_"+L+".key"
-		// "rsa_group9_"+L+".pub"
-		writeFile(cipher,keyPair);
+		
+		
+	}
+	
+	static void createRSACipher(){
+				
+				//start time capture
+				long startTime = System.nanoTime();
+				
+				//Generates the 3 keys that RSA need.
+				//KeyPair[0] = e
+				//KeyPair[1] = n
+				//KeyPair[2] = d
+				//KeyPair[3] = n
+				BigInteger[] keyPair = generateKey();
+				
+				
+				//reads our file
+				int[] plainText = readFile("rsa_group9_"+L+".plain");
+				
+				//Encrypt plaintext
+				BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
+
+				//end of time capture
+				long endTime = System.nanoTime();
+				System.out.println("Run time: "+(endTime-startTime)+" ns"); 
+				
+				//Writes files :
+				// "rsa_group9_"+L+".crypto"
+				// "rsa_group9_"+L+".key"
+				// "rsa_group9_"+L+".pub"
+				writeFile(cipher,keyPair);
+	}
+	
+	static void breakCipher(Hashtable<BigInteger, BigInteger> hashtablePowMod,Hashtable<BigInteger,
+			BigInteger> hashtableIndex,Hashtable<BigInteger, BigInteger> hashtableInverses, BigInteger publicKey_E, BigInteger publicKey_N, BigInteger Cipher){
+		
+		//(c * inv(hashtableIndex[i], n)) mod n = X
+		//if j = hashtablePowMod[X] exist, then
+		// m = i * j mod n
+		
 	}
 	
 	
-	// Breaking RSA
+	static void generateInverses(Hashtable<BigInteger,BigInteger> hashtableIndex,int r , BigInteger publicKey_N){
+		//Make a hashtable of inv(hashtableIndex[i], n) with index i from 0 to 2^r
+	}
 	
-	// Must use bigInteger
 	
 	//Could use two hashtables with bigintegers, one for indexes and one for sqm.
 	
-	Object[] generatePossibleCiphers(BigInteger publicKey_E, BigInteger publicKey_N,int r)
+	static Object[] generatePossibleCiphers(BigInteger publicKey_E, BigInteger publicKey_N,int r)
 	{
 		Hashtable<BigInteger, BigInteger> hashtablePowMod = new Hashtable<BigInteger, BigInteger>();
 		Hashtable<BigInteger, BigInteger> hashtableIndex = new Hashtable<BigInteger, BigInteger>();	
@@ -87,10 +94,7 @@ public class RSA {
 	}
 	
 	
-	
-	
-	
-	
+
 	
 	/**
 	 * Writes cipher, private and public key to files.
