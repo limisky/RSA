@@ -25,9 +25,9 @@ public class RSA {
 			L+=1;
 		}
 		
- */
+ */	
 		
-		int r = 20;
+		int r = 10;
 		BigInteger cipher = new BigInteger("14172094941630367068");
 		BigInteger publicKey_N = new BigInteger("14531292715970838697");
 		BigInteger publicKey_E = new BigInteger("4046989993");
@@ -44,7 +44,7 @@ public class RSA {
 		
 		BigInteger plain = breakCipher(hashtablePowMod, hashtableInverses, publicKey_N, cipher, r);
 		
-		System.out.println("Char was: "+ plain.toString()); 
+		System.out.println("Char was: "+ (char)plain.intValue() ); 
 		System.out.println("Should be: Y");
 	}
 	
@@ -90,14 +90,14 @@ public class RSA {
 		BigInteger Max = big_two.pow(r);
 		
 		//is the multiplication before or after modulo?
-		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == -1 ; i = i.subtract(BigInteger.ONE)){
+		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == 1 ; i = i.subtract(BigInteger.ONE)){
 			
 			BigInteger X = cipher.multiply(hashtableInverses.get(i).mod(publicKey_N));
 			BigInteger j = hashtablePowMod.get(X);
 			BigInteger minusOne = new BigInteger("-1");
-			
+
 				//if X was in the table then we found our plaintext
-				if (j.compareTo(minusOne) != 0){
+				if (j != null){
 					//Found m!!
 					return  i.multiply(j).mod(publicKey_N);
 				}
@@ -112,9 +112,9 @@ public class RSA {
 		Hashtable<BigInteger, BigInteger> hashtableInverses = new Hashtable<BigInteger, BigInteger>();
 		BigInteger Max = big_two.pow(r);
 		
-		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == -1 ; i = i.subtract(BigInteger.ONE)){
+		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == 1 ; i = i.subtract(BigInteger.ONE)){
 			BigInteger Temp = inv(hashtableIndex.get(i), publicKey_N);
-			hashtableInverses.put(i, Temp);
+			hashtableInverses.put(i, Temp);		
 		}
 		return hashtableInverses;
 	}
@@ -132,10 +132,12 @@ public class RSA {
 		BigInteger Temp;
 		
 		// Do the loop 2^r times. Beginning from 2^r and ending on 0
-		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) >= 0 ; i = i.subtract(BigInteger.ONE)){
+		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == 1 ; i = i.subtract(BigInteger.ONE)){
+			System.out.println("yo");	
 			Temp = sqm(i,publicKey_E,publicKey_N);
 			hashtablePowMod.put(Temp, i);
 			hashtableIndex.put(i, Temp);
+			//System.out.println(Temp);
 		}
 		
 		//Hashtable<BigInteger, BigInteger> hashtableReturn[] = new Hashtable<BigInteger, BigInteger>[2];
