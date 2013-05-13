@@ -11,68 +11,117 @@ public class RSA {
 	final static int KEY_BITLENGTH = 32;	//size of e, can not be greater then 2*PQ_BITLENGTH
 	
 	
+	// Have to increase heap space
+	// http://edwards.sdsu.edu/research/index.php/daniel/236-increasing-heap-size-in-eclipse
+	
 	static Random rnd = new Random();
 	static BigInteger big_two = new BigInteger("2"); //BigInteger is Java's way of using big integer. This declares two.
 	
 	public static void main(String[] args) {
 		
 		//Uncomment this section for creating group 9s cryptos, plaintext on file is needed
-/*		for (int i=1; i<=4; i++){
+/*		for (int i=1; i<4; i++){
 			createRSACipher();
 			L+=1;
 		}
+		
  */
 		
+		int r = 20;
+		BigInteger cipher = new BigInteger("14172094941630367068");
+		BigInteger publicKey_N = new BigInteger("14531292715970838697");
+		BigInteger publicKey_E = new BigInteger("4046989993");
 		
+		Object[] hashtables = generatePossibleCiphers(publicKey_E,  publicKey_N, r);
+		@SuppressWarnings("unchecked")
+		Hashtable<BigInteger,BigInteger> hashtableIndex = (Hashtable<BigInteger,BigInteger>) hashtables[1];
+		@SuppressWarnings("unchecked")
+		Hashtable<BigInteger,BigInteger> hashtablePowMod = (Hashtable<BigInteger,BigInteger>) hashtables[0];
+		System.out.println("i^e mod n, done");		
 		
+		Hashtable<BigInteger,BigInteger> hashtableInverses = generateInverses(hashtableIndex, r, publicKey_N);
+		System.out.println("Inverses done");
+		
+		BigInteger plain = breakCipher(hashtablePowMod, hashtableInverses, publicKey_N, cipher, r);
+		
+		System.out.println("Char was: "+ plain.toString()); 
+		System.out.println("Should be: Y");
 	}
 	
 	static void createRSACipher(){
 				
-				//start time capture
-				long startTime = System.nanoTime();
-				
-				//Generates the 3 keys that RSA need.
-				//KeyPair[0] = e
-				//KeyPair[1] = n
-				//KeyPair[2] = d
-				//KeyPair[3] = n
-				BigInteger[] keyPair = generateKey();
-				
-				
-				//reads our file
-				int[] plainText = readFile("rsa_group9_"+L+".plain");
-				
-				//Encrypt plaintext
-				BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
+		//start time capture
+		long startTime = System.nanoTime();
+		
+		//Generates the 3 keys that RSA need.
+		//KeyPair[0] = e
+		//KeyPair[1] = n
+		//KeyPair[2] = d
+		//KeyPair[3] = n
+		BigInteger[] keyPair = generateKey();
+		
+		
+		//reads our file
+		int[] plainText = readFile("rsa_group9_"+L+".plain");
+		
+		//Encrypt plaintext
+		BigInteger[] cipher = encrypt(plainText,L,keyPair[0],keyPair[1]);
 
-				//end of time capture
-				long endTime = System.nanoTime();
-				System.out.println("Run time: "+(endTime-startTime)+" ns"); 
-				
-				//Writes files :
-				// "rsa_group9_"+L+".crypto"
-				// "rsa_group9_"+L+".key"
-				// "rsa_group9_"+L+".pub"
-				writeFile(cipher,keyPair);
-	}
-	
-	static void breakCipher(Hashtable<BigInteger, BigInteger> hashtablePowMod,Hashtable<BigInteger,
-			BigInteger> hashtableIndex,Hashtable<BigInteger, BigInteger> hashtableInverses, BigInteger publicKey_E, BigInteger publicKey_N, BigInteger Cipher){
+		//end of time capture
+		long endTime = System.nanoTime();
+		System.out.println("Run time: "+(endTime-startTime)+" ns"); 
 		
-		//(c * inv(hashtableIndex[i], n)) mod n = X
-		//if j = hashtablePowMod[X] exist, then
-		// m = i * j mod n
+		//Writes files :
+		// "rsa_group9_"+L+".crypto"
+		// "rsa_group9_"+L+".key"
+		// "rsa_group9_"+L+".pub"
+		writeFile(cipher,keyPair);
+	}
+	
+	
+	//c * inv(hashtableIndex[i], n) mod n = X
+			//if j = hashtablePowMod[X] exist, then
+			// m = i * j mod n
+	
+		// or -1 if not found
+	static BigInteger breakCipher(Hashtable<BigInteger, BigInteger> hashtablePowMod,
+			Hashtable<BigInteger, BigInteger> hashtableInverses, BigInteger publicKey_N, BigInteger cipher, int r)
+	{
+		BigInteger Max = big_two.pow(r);
 		
+		//is the multiplication before or after modulo?
+		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == -1 ; i = i.subtract(BigInteger.ONE)){
+			
+			BigInteger X = cipher.multiply(hashtableInverses.get(i).mod(publicKey_N));
+			BigInteger j = hashtablePowMod.get(X);
+			BigInteger minusOne = new BigInteger("-1");
+			
+				//if X was in the table then we found our plaintext
+				if (j.compareTo(minusOne) != 0){
+					//Found m!!
+					return  i.multiply(j).mod(publicKey_N);
+				}
+		}
+		return new BigInteger("-1");
+	}
+	
+	//inv(i^e mod n, n)
+	static Hashtable<BigInteger, BigInteger> generateInverses(Hashtable<BigInteger,BigInteger> hashtableIndex,int r , BigInteger publicKey_N)
+	{
+		//Make a hashtable of inv(hashtableIndex[i], n) with index i from 0 to 2^r 
+		Hashtable<BigInteger, BigInteger> hashtableInverses = new Hashtable<BigInteger, BigInteger>();
+		BigInteger Max = big_two.pow(r);
+		
+		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == -1 ; i = i.subtract(BigInteger.ONE)){
+			BigInteger Temp = inv(hashtableIndex.get(i), publicKey_N);
+			hashtableInverses.put(i, Temp);
+		}
+		return hashtableInverses;
 	}
 	
 	
-	static void generateInverses(Hashtable<BigInteger,BigInteger> hashtableIndex,int r , BigInteger publicKey_N){
-		//Make a hashtable of inv(hashtableIndex[i], n) with index i from 0 to 2^r
-	}
-	
-	
-	//Could use two hashtables with bigintegers, one for indexes and one for sqm.
+	//for i := 1 to 2^r
+		//	table[i] = i^e mod n
 	
 	static Object[] generatePossibleCiphers(BigInteger publicKey_E, BigInteger publicKey_N,int r)
 	{
@@ -80,10 +129,11 @@ public class RSA {
 		Hashtable<BigInteger, BigInteger> hashtableIndex = new Hashtable<BigInteger, BigInteger>();	
 		
 		BigInteger Max = big_two.pow(r);
+		BigInteger Temp;
 		
 		// Do the loop 2^r times. Beginning from 2^r and ending on 0
 		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) >= 0 ; i = i.subtract(BigInteger.ONE)){
-			BigInteger Temp = sqm(i,publicKey_E,publicKey_N);
+			Temp = sqm(i,publicKey_E,publicKey_N);
 			hashtablePowMod.put(Temp, i);
 			hashtableIndex.put(i, Temp);
 		}
