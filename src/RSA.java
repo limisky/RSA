@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.math.BigInteger;
+import java.util.Hashtable;
 import java.util.Random;
 
 public class RSA {
@@ -58,6 +59,38 @@ public class RSA {
 		// "rsa_group9_"+L+".pub"
 		writeFile(cipher,keyPair);
 	}
+	
+	
+	// Breaking RSA
+	
+	// Must use bigInteger
+	
+	//Could use two hashtables with bigintegers, one for indexes and one for sqm.
+	
+	Object[] generatePossibleCiphers(BigInteger publicKey_E, BigInteger publicKey_N,int r)
+	{
+		Hashtable<BigInteger, BigInteger> hashtablePowMod = new Hashtable<BigInteger, BigInteger>();
+		Hashtable<BigInteger, BigInteger> hashtableIndex = new Hashtable<BigInteger, BigInteger>();	
+		
+		BigInteger Max = big_two.pow(r);
+		
+		// Do the loop 2^r times. Beginning from 2^r and ending on 0
+		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) >= 0 ; i = i.subtract(BigInteger.ONE)){
+			BigInteger Temp = sqm(i,publicKey_E,publicKey_N);
+			hashtablePowMod.put(Temp, i);
+			hashtableIndex.put(i, Temp);
+		}
+		
+		//Hashtable<BigInteger, BigInteger> hashtableReturn[] = new Hashtable<BigInteger, BigInteger>[2];
+		//return hashtableIndex;
+		return new Object[]{hashtablePowMod, hashtableIndex};
+	}
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * Writes cipher, private and public key to files.
@@ -141,26 +174,7 @@ public class RSA {
 				else // L==1
 					plain[L*i+(L-j-1)] = tempPlain.intValue();
 					
-				
-//				
-//				if (j==0 && L==3)			
-//					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();	
-//				else if (j==0 && L==2)
-//					plain[L*i+(L-j-1)] = tempPlain.and(mask).intValue();
-//				else if(j==0 && L==1)
-//					plain[L*i+(L-j-1)] = tempPlain.intValue();
-//				
-//				else if(j==1 && L==3)
-//					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).and(mask).intValue();
-//				else if(j==1 && L==2)
-//					plain[L*i+(L-j-1)] = tempPlain.shiftRight(8).intValue();
-//				else if(j==1 && L==1)
-//					plain[L*i+(L-j-1)] = tempPlain.intValue();
-//				
-//				else if(j==2 && L==3)
-//					plain[L*i+(L-j-1)] = tempPlain.shiftRight(16).intValue();
-//				else
-//					plain[L*i+(L-j-1)] = -1;
+			
 				
 			}
 		}
@@ -385,7 +399,7 @@ public class RSA {
     }
     
     /**
-	 * //Square-and-Multiply algorithm to calculate (x^e) mod m
+	 * //Square-and-Multiply algorithm to calculate (x^e) mod m with BigIntegers
 	 * 
 	 * @param x - 
 	 * @param e - 
