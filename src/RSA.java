@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.util.Hashtable;
 import java.util.Random;
@@ -19,16 +17,38 @@ public class RSA {
 	
 	public static void main(String[] args) {
 		
-		//Uncomment this section for creating group 9s cryptos, plaintext on file is needed
-/*		for (int i=1; i<4; i++){
-			createRSACipher();
-			L+=1;
-		}
-		
- */	
+		// //Uncomment this section for creating group 9s cryptos, plaintext on file is needed
+		// for (int i=1; i<4; i++){
+		// 	createRSACipher();
+		// 	L+=1;
+		// }
 		
 		int r = 10;
-		BigInteger cipher = new BigInteger("14172094941630367068");
+
+		// File cryptoW = new File("group9decryption.plain");
+		// crypto.createNewFile();
+		// FileWriteer cryptoWriter = new FileWriteer(crypto);
+  		try{
+  			// Open the file that is the first 
+  			// command line parameter
+  			FileInputStream fstream = new FileInputStream("rsa_group9_1.crypto");
+  			// Get the object of DataInputStream
+  			DataInputStream in = new DataInputStream(fstream);
+  			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+  			String strLine;
+  			//Read File Line By Line
+  			while ((strLine = br.readLine()) != null)   {
+  				// Print the content on the console
+  				System.out.println (strLine);
+  			}
+  			//Close the input stream
+  			in.close();
+    	} catch (Exception e){//Catch exception if any
+  			System.err.println("Error: " + e.getMessage());
+ 	 	}
+  		
+
+		BigInteger cipher = new BigInteger("1946983491163747788");
 		BigInteger publicKey_N = new BigInteger("14531292715970838697");
 		BigInteger publicKey_E = new BigInteger("4046989993");
 		
@@ -45,7 +65,7 @@ public class RSA {
 		BigInteger plain = breakCipher(hashtablePowMod, hashtableInverses, publicKey_N, cipher, r);
 		
 		System.out.println("Char was: "+ (char)plain.intValue() ); 
-		System.out.println("Should be: Y");
+		System.out.println("Should be: o");
 	}
 	
 	static void createRSACipher(){
@@ -133,7 +153,6 @@ public class RSA {
 		
 		// Do the loop 2^r times. Beginning from 2^r and ending on 0
 		for (BigInteger i = Max; i.compareTo(BigInteger.ZERO) == 1 ; i = i.subtract(BigInteger.ONE)){
-			System.out.println("yo");	
 			Temp = sqm(i,publicKey_E,publicKey_N);
 			hashtablePowMod.put(Temp, i);
 			hashtableIndex.put(i, Temp);
