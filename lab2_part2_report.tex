@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt]{article}
+\documentclass[[UTF8, a4paper, 11pt]{article}
 \usepackage{fullpage}
 \usepackage[table]{xcolor}
 \usepackage{graphicx}
@@ -23,20 +23,176 @@
 %\date{Month Day, Year}
 \date{\today}
 
+
 \begin{document}
 
 \maketitle
 
-\section{Statistics}
+
+\part{Statistics}
+In this part, we present the runtimes of the diffrent ciphertexts as well as the resulting plaintext. We also investigate how big \emph{r} must be to get anything of value. We break the ciphertext three times, each time with a different \emph{r}. We chose \emph{r} to be in the intervall \begin{math} L*8 - 3 \leq r \geq L*8 \end{math}.
+
+\section{Group 1}
+
+\paragraph{Plaintext for L = 1} We call a a witness for the compositeness of n (sometimes mislead
+
+
+\paragraph{Plaintext for L = 2} 楮杬礠捡汬敤⁡⁳瑲潮朠睩瑮敳猬⁡汴桯畧栠楴⁩猠愠捥牴慩渠灲潯映潦 
+
 \begin{table}
   \centering
-  \begin{tabular}{|c|c|c|c|}
-    Group & r & L & Time(ns) \\
+  \begin{tabular}{ |c|c|c| }
     \hline
-
+    \multicolumn{3}{|c|}{Group 1} \\
+    \hline
+    \emph{r} & \emph{L} & \emph{Time(s)} \\
+    \hline
+    6 & 1 & 1.0 \\
+    7 & 1 & 1.0 \\
+    8 & 1 & 3.0 \\
+    14 & 2 & 120.0 \\
+    15 & 2 & 240.0 \\
+    16 & 2 & 480.0 \\
+    \hline
   \end{tabular}
+  \caption{Statistics for Group 1 cryptotext}
 \end{table}
 
-  
+\section{Group 2}
+
+\begin{table}
+  \centering
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \multicolumn{3}{|c|}{Group 2} \\
+    \hline
+    \emph{r} & \emph{L} & \emph{Time(s)} \\
+    \hline
+    6 & 1 & 13.0 \\
+    7 & 1 & 26.0 \\
+    8 & 1 & 52.0 \\
+    14 & 2 & 1489.0 \\
+    15 & 2 & 2989.0 \\
+    16 & 2 & 5953.0 \\
+    \hline
+  \end{tabular}
+  \caption{Statistics for group 2 cryptotext}
+\end{table}
+
+\section{Group 3}
+
+\begin{table}
+  \centering
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \multicolumn{3}{|c|}{Group 3} \\
+    \hline
+    \emph{r} & \emph{L} & \emph{Time(s)} \\
+    \hline
+    6 & 1 & 10.0 \\
+    7 & 1 & 20.0 \\
+    8 & 1 & 41.0 \\
+    14 & 2 & 520.0 \\
+    15 & 2 & 1046.0 \\
+    16 & 2 & 2100.0 \\
+    \hline
+  \end{tabular}
+  \caption{Statistics for group 3 cryptotext}
+\end{table}
+
+\section{Group 4}
+
+\begin{table}
+  \centering
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \multicolumn{3}{|c|}{Group 4} \\
+    \hline
+    \emph{r} & \emph{L} & \emph{Time(s)} \\
+    \hline
+    6 & 1 & 0.0 \\
+    7 & 1 & 0.0 \\
+    8 & 1 & 0.0 \\
+    14 & 2 & 32.0 \\
+    15 & 2 & 65.0 \\
+    16 & 2 & 130.0 \\
+    \hline
+  \end{tabular}
+  \caption{Statistics for group 4 cryptotext}
+\end{table}
+
+\section{Group 6}
+
+\begin{table}
+  \centering
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \multicolumn{3}{|c|}{Group 6} \\
+    \hline
+    \emph{r} & \emph{L} & \emph{Time(s)} \\
+    \hline
+    6 & 1 & 7.0 \\
+    7 & 1 & 15.0 \\
+    8 & 1 & 31.0 \\
+    14 & 2 & 844.0 \\
+    15 & 2 & 1687.0 \\
+    16 & 2 & 3388.0 \\
+    \hline
+  \end{tabular}
+  \caption{Statistics for group 6 cryptotext}
+\end{table}
+
+\section{Group 8}
+
+\begin{table}
+  \centering
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \multicolumn{3}{|c|}{Group 8} \\
+    \hline
+    \emph{r} & \emph{L} & \emph{Time(s)} \\
+    \hline
+    6 & 1 & 1.0 \\
+    7 & 1 & 2.0 \\
+    8 & 1 & 4.0 \\
+    14 & 2 & 168.0 \\
+    15 & 2 & 338.0 \\
+    16 & 2 & 676.0 \\
+    \hline
+  \end{tabular}
+  \caption{Statistics for group 8 cryptotext}
+\end{table}
+
+\section{Group 9}
+
+\begin{table}
+  \centering
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \multicolumn{3}{|c|}{Group 9} \\
+    \hline
+    \emph{r} & \emph{L} & \emph{Time(s)} \\
+    \hline
+    6 & 1 & 0.0 \\
+    7 & 1 & 0.0 \\
+    8 & 1 & 0.0 \\
+    14 & 2 & 18.0 \\
+    15 & 2 & 37.0 \\
+    16 & 2 & 75.0 \\
+    \hline
+  \end{tabular}
+  \caption{Statistics for group 9 cryptotext}
+\end{table}
+
+\part{Reflection}
+
+\section{Describe what you think is missing in your implementation of the RSA algorithm (of part 1) to make it a usable product one can rely on. In particular, what are the potential sources of insecurity?}
+Making \emph{L} larger will make it a more usable product. As it is now with L very small it easy to break.
+
+\section{Explain how and why the attack you implemented works. Explain also why it works even if you don't know what is the language/structure of the plain text.}
+The language does not matter since we are dealing with the character codes rather than with the alphabet it self. 
+
+\section{The attack you have used is only possible for small L. A usual way to attack RSA is to try to factor n into its two prime factors. Look at the public key files of the submitted ciphers. Are there some that you think are insecure (because too small) from this point of view? Specify what you consider as insecure and why.}
+
 
 \end{document}

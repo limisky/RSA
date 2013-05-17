@@ -27,16 +27,16 @@ public class RSA {
 		/* This will solve the groups crypto files*/ 
   		try{
   			File statistic = new File("lab2_statstics.txt");
-  			for (int i = 1; i <= 9; i++) {
+  			for (int i = 8; i <= 8; i++) {
   				if (i == 5 || i == 7)
   					continue;
 				L = 1;
   				groupNr = i;
-				for (int y = 1; y <= 3; y++) {
+				for (int y = 2; y <= 2; y++) {
 					L = y;
-					r = L*8 - 3;
-					for (int j = 0; j <= 2; j++) {
-						r++;
+					r = L*8 -1;
+					for (int j = 2; j <= 2; j++) {
+						// r++;
 						FileWriter statisticWriter = new FileWriter(statistic, true);
 						System.out.println("STARTING BREAKING CIPHER \n");
 						System.out.println("-----------------------------\n");
@@ -76,7 +76,21 @@ public class RSA {
 							Hashtable<BigInteger,BigInteger> hashtableInverses = generateInverses(hashtableIndex, r, publicKey_N);
 
 							BigInteger plain = breakCipher(hashtablePowMod, hashtableInverses, publicKey_N, cipher, r);
-							cryptoWriter.write((char)plain.intValue() );
+							if (L == 1){
+								cryptoWriter.write((char) plain.intValue());
+							}
+							else if (L == 2) {
+								int[] plain_temp = bitShift(plain, L);
+								cryptoWriter.write((char) plain_temp[0]);
+								cryptoWriter.write((char) plain_temp[1]);
+							}
+							else if (L == 3) {
+								int[] plain_temp = bitShift(plain, L);
+								cryptoWriter.write((char) plain_temp[0]);
+								cryptoWriter.write((char) plain_temp[1]);
+								cryptoWriter.write((char) plain_temp[2]);
+							}
+							
 							cryptoWriter.close();
   						}
 
@@ -109,7 +123,7 @@ public class RSA {
   					continue;
 				L = 1;
   				groupNr = i;
-				for (int y = 1; y <= 7; y++) {
+				for (int y = 3; y <= 7; y++) {
 					L = y;
 					r = L*8;
 					FileWriter statisticWriter = new FileWriter(statistic, true);
@@ -149,9 +163,23 @@ public class RSA {
 						Hashtable<BigInteger,BigInteger> hashtableInverses = generateInverses(hashtableIndex, r, publicKey_N);
 
 						BigInteger plain = breakCipher(hashtablePowMod, hashtableInverses, publicKey_N, cipher, r);
-						cryptoWriter.write((char)plain.intValue() );
-						cryptoWriter.close();
-  					}
+						if (L == 1){
+								cryptoWriter.write((char) plain.intValue());
+							}
+							else if (L == 2) {
+								int[] plain_temp = bitShift(plain, L);
+								cryptoWriter.write((char) plain_temp[0]);
+								cryptoWriter.write((char) plain_temp[1]);
+							}
+							else if (L == 3) {
+								int[] plain_temp = bitShift(plain, L);
+								cryptoWriter.write((char) plain_temp[0]);
+								cryptoWriter.write((char) plain_temp[1]);
+								cryptoWriter.write((char) plain_temp[2]);
+							}
+							
+							cryptoWriter.close();
+  						}
 
   					endTime = System.nanoTime();
   					in.close();
@@ -174,12 +202,6 @@ public class RSA {
     	} catch (Exception e){ 
   			System.err.println("Error: " + e.getMessage());
  	 	}
-
-
-
- 	 	
-		
-		 
 	}
 	
 	static void createRSACipher(){
@@ -277,6 +299,34 @@ public class RSA {
 		//return hashtableIndex;
 		return new Object[]{hashtablePowMod, hashtableIndex};
 	}
+	
+	static int[] bitShift(BigInteger crypto, int L) {
+		int[] plain = new int[L];
+		BigInteger mask= new BigInteger("255"); //used for masking out bits
+
+		for (int j = L-1;j>=0;j--)
+			{
+				if (L==3){
+					if (j==0)			
+						plain[(L-j-1)] = crypto.and(mask).intValue();
+					else if(j==1)
+						plain[(L-j-1)] = crypto.shiftRight(8).and(mask).intValue();
+					else //(j==2)
+						plain[(L-j-1)] = crypto.shiftRight(16).intValue();
+				}
+				else if (L==2){
+					if (j==0)
+						plain[(L-j-1)] = crypto.and(mask).intValue();
+					else //(j==1)
+						plain[(L-j-1)] = crypto.shiftRight(8).intValue();
+				}
+				else // L==1
+					plain[(L-j-1)] = crypto.intValue();
+		}
+		return plain;
+
+	}
+
 	
 	
 
